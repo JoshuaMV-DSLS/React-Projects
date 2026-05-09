@@ -20,12 +20,10 @@
     "url": "https://github.com/JoshuaMV-DSLS/React-Projects/issues"
   },
   "homepage": "https://github.com/JoshuaMV-DSLS/React-Projects#readme",
-  
   "dependencies": {
-    "react": "^18.3.0",
-    "react-dom": "^18.3.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
-  
   "devDependencies": {
     "@swc/core": "^1.15.33",
     "@vitejs/plugin-react-swc": "^4.3.0",
