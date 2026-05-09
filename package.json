@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/JoshuaMV-DSLS/React-Projects#readme",
   "devDependencies": {
-    "@vitejs/plugin-react-swc": "^4.3.0"
+    "@swc/core": "^1.15.33",
+    "@vitejs/plugin-react-swc": "^4.3.0",
+    "swc-loader": "^0.2.7"
   }
 }
