@@ -9,5 +9,13 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoshuaMV-DSLS/React-Projects.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JoshuaMV-DSLS/React-Projects/issues"
+  },
+  "homepage": "https://github.com/JoshuaMV-DSLS/React-Projects#readme"
 }
