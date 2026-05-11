@@ -42,7 +42,6 @@ function RoomView({ data }) {
   );
 }
 
-export default App
 
 //@ts-ignore
 function MazeMap({ data }) {
@@ -52,14 +51,20 @@ function MazeMap({ data }) {
     // @ts-ignore
     setCurrentRoom(roomId);
   }
-  
+
   return (
-    <section>
-      <h3>Maze</h3>
-      <p>{data}</p>
-
-      <button> MazeMap()</button>
-
-    </section>
+    <>
+      <section>
+        <h3 className="btn-map-toggle">Maze</h3>
+        <p>{data}</p>
+        <section>
+            <button className="btn-map-toggle" onClick={onclick}>
+            Ver Mapa
+        </button>
+        </section>
+      </section>
+    </> 
   );
 }
+
+export default App;

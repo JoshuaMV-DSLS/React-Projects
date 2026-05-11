@@ -183,3 +183,76 @@ code {
   color: var(--error-color);
   border-color: var(--error-color);
 }
+
+/* Contenedor principal del mapa (puede ser un modal) */
+.maze-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(13, 15, 18, 0.95);
+  border: 2px solid var(--accent-color);
+  padding: 30px;
+  z-index: 100;
+  display: grid;
+  grid-template-columns: repeat(3, 100px); /* Ajusta según el tamaño de tu mapa */
+  gap: 20px;
+  justify-content: center;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), var(--border-glow);
+}
+
+/* Estilo de cada nodo de habitación en el mapa */
+.map-node {
+  width: 100px;
+  height: 80px;
+  background: #1a1d23;
+  border: 1px solid #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #888;
+  position: relative;
+}
+
+/* Habitación donde está el jugador actualmente */
+.map-node.current {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  background: rgba(0, 255, 157, 0.1);
+  box-shadow: inset 0 0 10px rgba(0, 255, 157, 0.2);
+}
+
+/* Habitación ya resuelta */
+.map-node.solved {
+  border-style: double;
+  border-width: 3px;
+}
+
+/* Efecto al pasar el mouse */
+.map-node:hover {
+  background: #252a33;
+  transform: scale(1.05);
+  color: #fff;
+}
+
+/* El botón que abre el mapa */
+.btn-map-toggle {
+  background: transparent;
+  color: var(--accent-color);
+  border: 1px solid var(--accent-color);
+  padding: 10px 20px;
+  font-family: var(--font-tech);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: all 0.3s;
+}
+
+.btn-map-toggle:hover {
+  background: var(--accent-color);
+  color: var(--bg-color);
+}
