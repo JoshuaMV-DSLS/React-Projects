@@ -1,3 +1,4 @@
+// @ts-ignore
 import { useState, useEffect} from "react";
 
 const escapeMap = [
@@ -8,18 +9,25 @@ const escapeMap = [
   { id: 4, name: "Room 5", description: "You are in a maintenance room." },
   { id: 5, name: "Room 6", description: "You are in a service hall." }
 ];
+// @ts-ignore
 const maze = [Array(10).fill(null)];
 
 function App() {
 
   const [currentRoomId, setCurrentRoomId] = useState(0);
+  const [showMap, setShowMap] = useState(false);
   const currentRoom = escapeMap[currentRoomId];
+
   // @ts-ignore
   const setCurrentRoom = (roomId) => {
-  if (roomId >= 0 && roomId < escapeMap.length) {
-    setCurrentRoomId(roomId);
-  }
-};
+    if (roomId >= 0 && roomId < escapeMap.length) {
+      setCurrentRoomId(roomId);
+    }
+  };
+
+  const handleMapToggle = () => {
+    setShowMap((prev) => !prev);
+  };
 
   return (
     <main> 
@@ -27,6 +35,13 @@ function App() {
       <h1>Welcome to My Game</h1>
       <p>Use the arrow keys to navigate through the maze.</p>
       <RoomView data={currentRoom} />
+          <section>
+          <div>
+            <button className="btn-map-toggle" onClick={handleMapToggle}>
+            Ver Mapa
+          </button>
+        </div>
+      </section>
     </div>
     </main>
   )
@@ -44,6 +59,7 @@ function RoomView({ data }) {
 
 
 //@ts-ignore
+// @ts-ignore
 function MazeMap({ data }) {
   // @ts-ignore
   const onclick = (event) => {
@@ -54,15 +70,27 @@ function MazeMap({ data }) {
 
   return (
     <>
-      <section>
-        <h3 className="btn-map-toggle">Maze</h3>
-        <p>{data}</p>
-        <section>
-            <button className="btn-map-toggle" onClick={onclick}>
-            Ver Mapa
-        </button>
-        </section>
-      </section>
+      <h2>Maze Map</h2>
+      <div className="maze-map">
+        {data.map((
+// @ts-ignore
+        row, rowIndex) => (
+          <div key={rowIndex} className="maze-row">
+            {row.map((
+// @ts-ignore
+            cell, cellIndex) => (
+              <div
+                key={cellIndex}
+                className="maze-cell"
+                data-room-id={rowIndex * 10 + cellIndex}
+                onClick={onclick}
+              >
+                {cell ? "X" : ""}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
     </> 
   );
 }
