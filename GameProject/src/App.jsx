@@ -9,7 +9,7 @@ const escapeMap = [
   { id: 4, name: "Room 5", description: "You are in a maintenance room." },
   { id: 5, name: "Room 6", description: "You are in a service hall." }
 ];
-// @ts-ignore
+
 const maze = [Array(10).fill(null)];
 
 function App() {
