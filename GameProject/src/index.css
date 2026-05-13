@@ -199,7 +199,7 @@ code {
   grid-template-columns: repeat(1, 100px); /* 5 columnas que ocupan el mismo espacio */
   gap: 15px;
   width: 90%;          
-  max-width: 500px;
+  max-width: 70%;
   min-height: 300px;    
   position:center;
   
@@ -212,6 +212,7 @@ code {
   padding: 30px;
   grid-template-columns: repeat(5, 1fr);
   gap: 5px;
+  position:center;
 }
 
 /* Estilo de cada nodo de habitación en el mapa */
