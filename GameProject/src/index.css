@@ -197,7 +197,6 @@ code {
   
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3 columnas que ocupan el mismo espacio */
-  grid-template-rows: repeat(5, 1fr);
   gap: 15px;
   width: 90%;          
   max-width: 500px;
