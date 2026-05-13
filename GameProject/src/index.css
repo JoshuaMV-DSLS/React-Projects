@@ -196,14 +196,22 @@ code {
   z-index: 1000;
   
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columnas que ocupan el mismo espacio */
+  grid-template-columns: repeat(1, 100px); /* 5 columnas que ocupan el mismo espacio */
   gap: 15px;
   width: 90%;          
   max-width: 500px;
   min-height: 300px;    
+  position:center;
   
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), var(--border-glow);
   pointer-events: all; 
+}
+
+.maze-grid{
+  display: grid;
+  padding: 30px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
 }
 
 /* Estilo de cada nodo de habitación en el mapa */
