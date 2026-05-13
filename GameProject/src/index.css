@@ -186,7 +186,7 @@ code {
 
 /* Contenedor principal del mapa (puede ser un modal) */
 .maze-container {
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -195,7 +195,7 @@ code {
   padding: 30px;
   z-index: 100;
   display: grid;
-  grid-template-columns: repeat(3, 100px); /* Ajusta según el tamaño de tu mapa */
+  grid-template-columns: repeat(1 5, 100px); /* Ajusta según el tamaño de tu mapa */
   gap: 20px;
   justify-content: center;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), var(--border-glow);

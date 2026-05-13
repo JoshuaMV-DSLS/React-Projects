@@ -1,5 +1,6 @@
 // @ts-ignore
-import { useState, useEffect} from "react";
+// @ts-ignore
+import { useState, useEffect } from "react";
 
 const escapeMap = [
   { id: 0, name: "Room 1", description: "You are in a dark cell room." },
@@ -10,41 +11,70 @@ const escapeMap = [
   { id: 5, name: "Room 6", description: "You are in a service hall." }
 ];
 
-const maze = [Array(10).fill(null)];
-
 function App() {
-
   const [currentRoomId, setCurrentRoomId] = useState(0);
   const [showMap, setShowMap] = useState(false);
   const currentRoom = escapeMap[currentRoomId];
 
   // @ts-ignore
-  const setCurrentRoom = (roomId) => {
-    if (roomId >= 0 && roomId < escapeMap.length) {
-      setCurrentRoomId(roomId);
-    }
+  const handleRoomSelect = (id) => {
+    setCurrentRoomId(id);
+    setShowMap(false); // Cerramos el mapa al elegir habitación
   };
 
   const handleMapToggle = () => {
-    setShowMap((prev) => !prev);
+    setShowMap(!showMap);
   };
 
   return (
-    <main> 
-    <div>
-      <h1>Welcome to My Game</h1>
-      <p>Use the arrow keys to navigate through the maze.</p>
-      <RoomView data={currentRoom} />
-          <section>
-          <div>
-            <button className="btn-map-toggle" onClick={handleMapToggle}>
-            Ver Mapa
+    <main>
+      <div>
+        <h1>Welcome to My Game</h1>
+        <p>Explore the facility and find the exit.</p>
+        
+        {/* Mostramos la vista de la habitación actual */}
+        <RoomView data={currentRoom} />
+
+        <section>
+          <button className="btn-map-toggle" onClick={handleMapToggle}>
+            {showMap ? "Cerrar Mapa" : "Ver Mapa"}
           </button>
-        </div>
-      </section>
-    </div>
+        </section>
+
+        {/* LÓGICA DEL MAPA: Solo se renderiza si showMap es true */}
+        {showMap && (
+          <MazeMap 
+            data={escapeMap} 
+            currentId={currentRoomId} 
+            onSelect={handleRoomSelect} 
+          />
+        )}
+      </div>
     </main>
-  )
+  );
+}
+
+// Componente del Mapa
+// @ts-ignore
+function MazeMap({ data, currentId, onSelect }) {
+  return (
+    <div className="maze-container">
+      <h3>MAPA DEL COMPLEJO</h3>
+      <div className="maze-grid">
+        {data.map((
+// @ts-ignore
+        room) => (
+          <div
+            key={room.id}
+            className={"map-node " + (room.id === currentId ? 'current' : '')}
+            onClick={() => onSelect(room.id)}
+          >
+            {room.name}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 // @ts-ignore
@@ -54,44 +84,6 @@ function RoomView({ data }) {
       <h3>{data.name}</h3>
       <p>{data.description}</p>
     </section>
-  );
-}
-
-
-//@ts-ignore
-// @ts-ignore
-function MazeMap({ data }) {
-  // @ts-ignore
-  const onclick = (event) => {
-    const roomId = parseInt(event.target.dataset.roomId);
-    // @ts-ignore
-    setCurrentRoom(roomId);
-  }
-
-  return (
-    <>
-      <h2>Maze Map</h2>
-      <div className="maze-map">
-        {data.map((
-// @ts-ignore
-        row, rowIndex) => (
-          <div key={rowIndex} className="maze-row">
-            {row.map((
-// @ts-ignore
-            cell, cellIndex) => (
-              <div
-                key={cellIndex}
-                className="maze-cell"
-                data-room-id={rowIndex * 10 + cellIndex}
-                onClick={onclick}
-              >
-                {cell ? "X" : ""}
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-    </> 
   );
 }
 
