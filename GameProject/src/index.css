@@ -25,6 +25,14 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  --bg-color: #0d0f12;
+  --panel-color: #1a1d23;
+  --accent-color: #00ff9d; /* Verde neón técnico */
+  --error-color: #ff4444;
+  --text-primary: #e0e0e0;
+  --border-glow: 0 0 10px rgba(0, 255, 157, 0.3);
+  --font-tech: 'Share Tech Mono', monospace; /* Ideal para el feeling de código/ingeniería */
+
   @media (max-width: 1024px) {
     font-size: 16px;
   }
@@ -51,17 +59,12 @@
 }
 
 body {
-  margin: 0;
-}
-
-:root {
-  --bg-color: #0d0f12;
-  --panel-color: #1a1d23;
-  --accent-color: #00ff9d; /* Verde neón técnico */
-  --error-color: #ff4444;
-  --text-primary: #e0e0e0;
-  --border-glow: 0 0 10px rgba(0, 255, 157, 0.3);
-  --font-tech: 'Share Tech Mono', monospace; /* Ideal para el feeling de código/ingeniería */
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  gap: 40px;
+  display:flex;
 }
 
 h1,
@@ -69,12 +72,13 @@ h2 {
   font-family: var(--heading);
   font-weight: 500;
   color: var(--text-h);
+  
 }
 
 h1 {
   font-size: 56px;
   letter-spacing: -1.68px;
-  margin: 32px 0;
+  margin: 24px 0;
   @media (max-width: 1024px) {
     font-size: 36px;
     margin: 20px 0;
@@ -84,13 +88,13 @@ h2 {
   font-size: 24px;
   line-height: 118%;
   letter-spacing: -0.24px;
-  margin: 0 0 8px;
+  margin: 20px 0;
   @media (max-width: 1024px) {
     font-size: 20px;
   }
 }
 p {
-  margin: 0;
+  margin: 20px;
 }
 
 code,
@@ -192,14 +196,14 @@ code {
   transform: translate(-50%, -50%);
   background: rgba(13, 15, 18, 0.98);
   border: 2px solid var(--accent-color);
-  padding: 30px;
+  padding: 40px;
   z-index: 1000;
   
   display: grid;
-  grid-template-columns: repeat(1, 100px); /* 5 columnas que ocupan el mismo espacio */
+  grid-template-columns: repeat(1, 100px);
   gap: 15px;
   width: 90%;          
-  max-width: 70%;
+  max-width: 65%;
   min-height: 300px;    
   position:center;
   
