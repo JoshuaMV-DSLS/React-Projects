@@ -1,87 +1,47 @@
-import { useState } from "react";
+import { useState, useContext} from "react";
+import { GameProvider, GameContext } from "./context/GameContext.jsx";
+import { escapeMap } from "./components/escapeMap.js";
 
-// EL MAPA:
-const escapeMap = [
-  { 
-    id: 0, 
-    name: "Room 1", 
-    description: "You are in a dark cell room.",
-    puzzle: { type:"circuit", solved: false, difficulty: "medium" },
-    items: [ { id: "key_card_blue", name: "Tarjeta Azul", description: "Acceso nivel 1" } ],
-    interactions: [ { id: "note_01", text: "La nota dice: 'El orden es 0-4-2'." } ],
-    connections: { north: 1 } // Lleva a Room 2
-  },
-  { 
-    id: 1, 
-    name: "Room 2", 
-    description: "You are in a dormroom.",
-    connections: { south: 0, east: 2 } // Regresa a Room 1, o va a Room 3
-  },
-  { 
-    id: 2, 
-    name: "Room 3", 
-    description: "You are in a basement room.",
-    connections: { west: 1 } // Regresa a Room 2
-  },
-  { id: 3, name: "Room 4", description: "You are in a library room.", connections: {} },
-  { id: 4, name: "Room 5", description: "You are in a maintenance room.", connections: {} },
-  { id: 5, name: "Room 6", description: "You are in a service hall.", connections: {} }
-];
+const useGame = () => useContext(GameContext);
+
+
+function GameLayout() {
+  const { currentRoomId } = useGame();
+  const [showMap, setShowMap] = useState(false);
+
+  return (
+    <main style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
+      <div>
+        <h1>Escape Room Terminal</h1>
+        <p>Explora las instalaciones e interactúa con el entorno.</p>
+        
+        <InventoryBar />
+
+        <section style={{ background: '#1a1d24', padding: '20px', borderRadius: '8px', marginTop: '20px' }}>
+          <RoomView />
+        </section>
+          
+        <section style={{ marginTop: '20px' }}>  
+          <button className="btn-map-toggle" onClick={() => setShowMap(!showMap)}>
+            {showMap ? "Cerrar Mapa" : "Ver Mapa"}
+          </button>
+        </section>
+
+        {showMap && <MazeMap currentId={currentRoomId} />}
+      </div>
+    </main>
+  );
+}
 
 //---------------------------
 // ---------- APP ----------
 //---------------------------
 
 export default function App() {
-  const [currentRoomId, setCurrentRoomId] = useState(0);
-  const [showMap, setShowMap] = useState(false);
-  
-  const currentRoom = escapeMap[currentRoomId];
-
-  // FUNCIÓN DE MOVIMIENTO
-  // @ts-ignore
-  const handleMove = (direction) => {
-    // Buscar la conexión entre room con la dirección
-    // @ts-ignore
-    const nextRoomId = currentRoom.connections?.[direction];
-
-    if (nextRoomId !== undefined) {
-      console.log(`Moviendo a la habitación: ${nextRoomId}`);
-      setCurrentRoomId(nextRoomId);
-    } else {
-      console.log("Camino bloqueado o pared en dirección:", direction);
-    }
-  };
-
-  const handleMapToggle = () => {
-    setShowMap(!showMap);
-  };
-
   return (
-    <main>
-      <div>
-        <h1>Welcome to My Game</h1>
-        <p>Explore the facility and find the exit.</p>
-        
-        <section style={{ marginTop: '20px' }}>  
-          <button className="btn-map-toggle" onClick={handleMapToggle}>
-            {showMap ? "Cerrar Mapa" : "Ver Mapa"}
-          </button>
-        </section>
-
-        <section>
-          {/*PASAR DATOS DE LA HABITACIÓN COMPLETA Y LA FUNCIÓN DE MOVIMIENTO */}
-          <RoomView room={currentRoom} onMove={handleMove} />
-        </section>
-
-        {showMap && (
-          <MazeMap 
-            data={escapeMap} 
-            currentId={currentRoomId} 
-          />
-        )}
-      </div>
-    </main>
+    <GameProvider>
+      <GameLayout />
+    </GameProvider>
   );
 }
 
@@ -90,63 +50,86 @@ export default function App() {
 //----------------------------------------------
 
 // @ts-ignore
-function RoomView({ room, onMove }) {
+function RoomView() {
+  const { currentRoom, collectedItemIds, pickUpItem } = useGame();
+  const availableItems = currentRoom.items?.filter(item => !collectedItemIds.includes(item.id)) || [];
+
   return (
     <>
-      <section>
-        <h2>{room.name}</h2>
-        <p>{room.description}</p>
-        {/*  Si existe pista en esta habitación se muestra*/}
-        {room.interactions && <p><strong>Pista:</strong> {room.interactions[0].text}</p>}
-      </section>
+      <h2>{currentRoom.name}</h2>
+      <p>{currentRoom.description}</p>
       
-      {/* Pasa las conexiones y la función a los controles */}
-      <NavigationControls connections={room.connections} onMove={onMove} />
+      {availableItems.length > 0 && (
+        <div style={{ margin: '15px 0', padding: '10px', border: '1px dashed #555' }}>
+          <p style={{ color: '#E6A23C' }}>👁️ Objetos en el área:</p>
+          {availableItems.map(item => (
+            <div key={item.id} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <span><strong>{item.name}</strong> - {item.description}</span>
+              <button onClick={() => pickUpItem(item)}>Recoger</button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <NavigationControls />
     </>
   );
 }
 
 // @ts-ignore
-function NavigationControls({ connections, onMove }) {
-  // No se muestran contoles si la habitación no tiene conexiones definidas
+function NavigationControls() {
+  const { currentRoom, movePlayer } = useGame();
+  const connections = currentRoom.connections;
+
   if (!connections) return null;
 
   return (
-    <div className="navigation-ui" style={{ marginTop: '15px' }}>
-      {connections.north !== undefined && 
-        <button onClick={() => onMove('north')}>Norte ↑</button>}
-      
+    <div className="navigation-ui" style={{ marginTop: '20px' }}>
+      {connections.north !== undefined && <button onClick={() => movePlayer('north')}>Norte ↑</button>}
       <div className="east-west-row" style={{ display: 'flex', gap: '10px', margin: '5px 0' }}>
-        {connections.west !== undefined && 
-          <button onClick={() => onMove('west')}>← Oeste</button>
-        }
-        
-        {connections.east !== undefined && 
-          <button onClick={() => onMove('east')}>Este →</button>}
+        {connections.west !== undefined && <button onClick={() => movePlayer('west')}>← Oeste</button>}
+        {connections.east !== undefined && <button onClick={() => movePlayer('east')}>Este →</button>}
       </div>
-
-      {connections.south !== undefined && 
-        <button onClick={() => onMove('south')}>Sur ↓</button>}
+      {connections.south !== undefined && <button onClick={() => movePlayer('south')}>Sur ↓</button>}
     </div>
   );
 }
 
 // @ts-ignore
-function MazeMap({ data, currentId }) {
+function MazeMap({ currentId }) {
   return (
     <div className="maze-container">
       <h3>MAPA DEL COMPLEJO</h3>
       <div className="maze-grid">
-        {data.map((
-// @ts-ignore
-        room) => (
-          <div
-            key={room.id}
-            className={"map-node " + (room.id === currentId ? 'current' : '')}
-          >
+        {escapeMap.map((room) => (
+          <div key={room.id} className={"map-node " + (room.id === currentId ? 'current' : '')}>
             {room.name}
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+function InventoryBar() {
+  const { inventory } = useGame();
+  return (
+    <div style={{ background: '#11141a', padding: '15px', borderRadius: '4px', border: '1px solid #333' }}>
+      <h3 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#888' }}>INVENTARIO</h3>
+      <div style={{ display: 'flex', gap: '15px' }}>
+        {[0, 1].map(index => {
+          const item = inventory[index];
+          return (
+            <div key={index} style={{
+              width: '120px', height: '50px', border: '1px solid #444', display: 'flex',
+              alignItems: 'center', justifyContent: 'center', fontSize: '12px',
+              background: item ? 'rgba(103, 194, 58, 0.1)' : 'transparent',
+              borderColor: item ? '#67C23A' : '#444'
+            }}>
+              {item ? item.name : "[ Vacío ]"}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
