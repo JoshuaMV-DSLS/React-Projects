@@ -5,13 +5,13 @@ export const escapeMap = [
     id: 0, 
     name: "Room 1 (Celda)", 
     description: "Una celda fría y oscura. El eco de unas tuberías resuena en las paredes.",
-    items: [ { id: "key_card_blue", name: "Tarjeta Azul", description: "Acceso de nivel 1" } ],
+    items: [ { id: "key_card_blue", name: "Tarjeta Azul", description: "Acceso de nivel 1", type: "tool" } ],
     connections: { north: 1 }},
   { 
     id: 1, 
     name: "Room 2 (Dormitorio)", 
     description: "Un dormitorio militar abandonado. Hay literas destrozadas y un fuerte olor a óxido.",
-    items: [ { id: "crowbar", name: "Palanca de Hierro", description: "Útil para forzar mecanismos" } ],
+    items: [ { id: "crowbar", name: "Palanca de Hierro", description: "Útil para forzar mecanismos", type: "tool" } ],
     connections: { south: 0, east: 2 }},
   { 
     id: 2, 
@@ -33,7 +33,7 @@ export const escapeMap = [
   { 
   id: 4, 
   name: "Room 5 (Mantenimiento)", 
-  description: "La sala de mantenimiento principal. Hay un panel de energía digital parpadeando en la pared que bloquea un casillero de alta seguridad.", 
+  description: "La sala de mantenimiento principal. Hay un panel digital, varios casilleros y maquinaria jusnto a una gran computadora.", 
   connections: { west: 2 },
   // NUEVO: Configuración del acertijo numérico
   puzzle: {
@@ -41,7 +41,7 @@ export const escapeMap = [
     type: "code",
     solution: "042", // El código de la nota
     isSolved: false,
-    rewardItem: { id: "fuses_heavy", name: "Fusibles de Alta Potencia", description: "Esenciales para restaurar la energía del complejo." },
+    rewardItem: { id: "fuses_heavy", name: "Fusibles", description: "Esenciales para restaurar la energía del complejo.", type: "consumable" },
     lockedMessage: "El panel digital requiere un código de acceso de 3 dígitos para desbloquear el casillero.",
     solvedMessage: "¡Código aceptado! El casillero neumático se abre con un siseo, revelando unos fusibles."
   }},

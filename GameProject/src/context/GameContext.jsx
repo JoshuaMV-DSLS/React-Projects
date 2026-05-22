@@ -56,8 +56,8 @@ export function GameProvider({ children }) {
 const isCurrentPuzzleSolved = currentRoom.puzzle ? solvedPuzzleIds.includes(currentRoom.puzzle.id) : false;
 
   const pickUpItem = (item) => {
-    if (inventory.length >= 2) {
-      setSystemMessage("¡Tu inventario está lleno! No puedes cargar más de 2 objetos.");
+    if (inventory.length >=5) {
+      setSystemMessage("¡Tu inventario está lleno! No puedes cargar más de 5 objetos.");
       return;
     }
     if (!inventory.some(i => i.id === item.id)) {
@@ -78,9 +78,9 @@ const isCurrentPuzzleSolved = currentRoom.puzzle ? solvedPuzzleIds.includes(curr
     setSystemMessage(puzzle.solvedMessage);
 
     // 2. Dar recompensa automáticamente si el inventario tiene espacio
-    if (puzzle.rewardItem && inventory.length < 3) {
+    if (puzzle.rewardItem && inventory.length < 5) {
       setInventory([...inventory, puzzle.rewardItem]);
-    } else if (inventory.length >= 3) {
+    } else if (inventory.length >=5) {
       setSystemMessage(`${puzzle.solvedMessage} (Tu inventario está lleno para recibir la recompensa, tira algo primero).`);
     }
   } else {

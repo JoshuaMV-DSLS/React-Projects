@@ -10,12 +10,13 @@ function GameLayout() {
   const [showMap, setShowMap] = useState(false);
 
   return (
-    <main style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
+    <main className="body">
       <div>
-        <h1>Escape Room Terminal</h1>
-        <p>Explora las instalaciones e interactúa con el entorno.</p>
-
-        <section style={{ marginTop: '20px' }}>  
+        <section style={{gridTemplateColumns: '1fr auto', display: 'flex', alignItems: 'center', gap: '20px', 'max-width': '100%' }}> 
+          <div>
+              <p>Escape Room Terminal</p>
+              <q>Explora las instalaciones e interactúa con el entorno.</q> 
+          </div>      
           <button className="btn-map-toggle" onClick={() => setShowMap(!showMap)}>
             {showMap ? "Cerrar Mapa" : "Ver Mapa"}
           </button>
@@ -26,16 +27,7 @@ function GameLayout() {
         </section>
 
         {systemMessage && (
-          <div style={{ 
-            background: '#2a1a1a', 
-            color: '#ff6b6b', 
-            padding: '10px 15px', 
-            borderRadius: '4px', 
-            marginTop: '15px',
-            borderLeft: '4px solid #f56c6c',
-            fontFamily: 'monospace',
-            fontSize: '13px'
-          }}>
+          <div className="sysmessage">
              {systemMessage}
           </div>
         )}
@@ -99,7 +91,7 @@ function NavigationControls() {
   if (!connections) return null;
 
   return (
-    <div className="navigation-ui" style={{ marginTop: '20px' }}>
+    <div className="navigation-ui">
       {connections.north !== undefined && <button onClick={() => movePlayer('north')}>Norte ↑</button>}
       <div className="east-west-row" style={{ display: 'flex', gap: '10px', margin: '5px 0' }}>
         {connections.west !== undefined && <button onClick={() => movePlayer('west')}>← Oeste</button>}
@@ -129,18 +121,13 @@ function MazeMap({ currentId }) {
 function InventoryBar() {
   const { inventory } = useGame();
   return (
-    <div style={{ background: '#11141a', padding: '15px', borderRadius: '4px', border: '1px solid #333' }}>
-      <h3 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#888' }}>INVENTARIO</h3>
-      <div style={{ display: 'flex', gap: '15px' }}>
-        {[0, 1].map(index => {
+    <div className="inventory-gird">
+      <h3>INVENTARIO</h3>
+      <div className="inventory">
+        {[0, 1, 2, 3, 4].map(index => {
           const item = inventory[index];
           return (
-            <div key={index} style={{
-              width: '120px', height: '50px', border: '1px solid #444', display: 'flex',
-              alignItems: 'center', justifyContent: 'center', fontSize: '12px',
-              background: item ? 'rgba(103, 194, 58, 0.1)' : 'transparent',
-              borderColor: item ? '#67C23A' : '#444'
-            }}>
+            <div key={index} className={`inventory-item ${item ? 'inventory-has-item' : 'inventory-is-empty'}`} >
               {item ? item.name : "[ Vacío ]"}
             </div>
           );
@@ -179,11 +166,7 @@ function CodeKeypad() {
       </p>
       
       {/* Pantalla del teclado */}
-      <div style={{ 
-        background: '#0d1117', color: '#39ff14', padding: '10px', 
-        textAlign: 'center', fontFamily: 'monospace', fontSize: '20px', 
-        borderRadius: '4px', marginBottom: '10px', letterSpacing: '4px' 
-      }}>
+      <div className="num-pad" data-active={true}>
         {digits.padEnd(3, "_")}
       </div>
 
