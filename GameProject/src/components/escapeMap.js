@@ -1,49 +1,52 @@
-// EL MAPA:
-// src/components/escapeMap.js
+// EL MAPA: Aquí definimos la estructura de las habitaciones, sus conexiones, los objetos que contienen, y los puzles asociados a cada una. Este mapa es la base de nuestro juego de escape room.
 export const escapeMap = [
   { 
     id: 0, 
     name: "Room 1 (Celda)", 
-    description: "Una celda fría y oscura. El eco de unas tuberías resuena en las paredes.",
+    description: "Una celda fría y oscura...",
     items: [ { id: "key_card_blue", name: "Tarjeta Azul", description: "Acceso de nivel 1", type: "tool" } ],
-    connections: { north: 1 }},
+    connections: { north: 1 }
+  },
   { 
     id: 1, 
     name: "Room 2 (Dormitorio)", 
-    description: "Un dormitorio militar abandonado. Hay literas destrozadas y un fuerte olor a óxido.",
+    description: "Un dormitorio militar abandonado...",
     items: [ { id: "crowbar", name: "Palanca de Hierro", description: "Útil para forzar mecanismos", type: "tool" } ],
-    connections: { south: 0, east: 2 }},
+    connections: { south: 0, east: 2 }
+  },
   { 
     id: 2, 
     name: "Room 3 (Sótano)", 
     description: "El sótano del complejo. Una enorme compuerta hidráulica bloquea el paso hacia el este.",
-    connections: { 
-      west: 1, 
-      east: 4 // Nos llevará a la Room 5 (Mantenimiento), por ejemplo
-    },
-    // NUEVO: Configuración del obstáculo de la habitación
+    connections: { west: 1, east: 4 },
     lock: {
       direction: "east",
       isLocked: true,
       requiredItem: "crowbar",
-      lockedDescription: "La compuerta hidráulica está completamente atascada por el óxido. Necesitas algo con mucha fuerza para hacer palanca.",
-      unlockedDescription: "Has forzado la compuerta usando la Palanca de Hierro. Ahora el acceso al este está abierto."
-    }},
-  { id: 3, name: "Room 4 (Biblioteca)", description: "Una biblioteca llena de archivos quemados.", connections: {} },
+      lockedDescription: "La compuerta está atascada...",
+      unlockedDescription: "Has forzado la compuerta usando la Palanca de Hierro."
+    }
+  },
   { 
-  id: 4, 
-  name: "Room 5 (Mantenimiento)", 
-  description: "La sala de mantenimiento principal. Hay un panel digital, varios casilleros y maquinaria jusnto a una gran computadora.", 
-  connections: { west: 2 },
-  // NUEVO: Configuración del acertijo numérico
-  puzzle: {
-    id: "panel_energia",
-    type: "code",
-    solution: "042", // El código de la nota
-    isSolved: false,
-    rewardItem: { id: "fuses_heavy", name: "Fusibles", description: "Esenciales para restaurar la energía del complejo.", type: "consumable" },
-    lockedMessage: "El panel digital requiere un código de acceso de 3 dígitos para desbloquear el casillero.",
-    solvedMessage: "¡Código aceptado! El casillero neumático se abre con un siseo, revelando unos fusibles."
-  }},
-  { id: 5, name: "Room 6 (Pasillo)", description: "Un pasillo de servicio oscuro.", connections: {} }
+    id: 4, 
+    name: "Room 5 (Mantenimiento)", 
+    description: "La sala de mantenimiento principal. Un panel de energía digital requiere un código, y la caja de circuitos principal requiere reparación.", 
+    connections: { west: 2 },
+    puzzle: {
+      id: "panel_energia",
+      type: "code",
+      solution: "042",
+      rewardItem: { id: "fuses_heavy", name: "Fusibles", description: "Fusibles de alta potencia.", type: "consumable" },
+      lockedMessage: "El panel digital requiere un código de acceso de 3 dígitos.",
+      solvedMessage: "¡Código aceptado! El casillero se abre revelando unos fusibles."
+    },
+    // NUEVO PUZLE: Requiere el uso directo de un ítem del inventario
+    itemPuzzle: {
+      id: "caja_fusibles",
+      requiredItemId: "fuses_heavy", // El ítem que el jugador debe "Usar" aquí
+      isSolved: false,
+      lockedMessage: "La caja de circuitos principal está vacía. Necesita fusibles de alta potencia para restaurar la luz del complejo.",
+      solvedMessage: "🔋 ¡Fusibles instalados! Los generadores rugen y la energía del complejo se ha restaurado por completo. ¡Has escapado!"
+    }
+  }
 ];

@@ -101,6 +101,7 @@ p {
   padding-bottom: 8px;
   padding-left: 20px;
   padding-right: 20px;
+  display: flex;
 }
 
 q{
@@ -306,15 +307,16 @@ code {
 }
 
 .inventory{
- display: flex; 
- gap: 15px; 
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .inventory-gird{
-background: #11141a;
-padding: 15px;
-border-radius: 4px;
-border: 1px solid #333; 
+  background: #11141a;
+  padding: 15px;
+  border-radius: 4px;
+  border: 1px solid #333;
 }
 
 .inventory-has-item {
@@ -340,6 +342,57 @@ border: 1px solid #333;
   background: transparent;
 }
 
+.item-name{
+  font-weight: bold;
+}
+
+.item-pos{
+  font-size: 9px;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.active-item-type{
+  font-size: 10px;
+  color: #888;
+  text-transform: uppercase; 
+  letter-spacing: 1px; 
+}
+
+.active-item-name{
+   margin: 5px 0 15px 0;
+   color: #fff;
+}
+
+.active-item-description{
+   color:#a0aec0;
+   font-size: 14px;
+   margin-bottom: 20px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #1a1d24;
+  border: 2px solid #67C23A;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 300px;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+}
+
 .num-pad[data-active=true]{
   background: #0d1117;
   color: #39ff14;
@@ -350,4 +403,191 @@ border: 1px solid #333;
   border-radius: 4px;
   margin-bottom: 10px;
   letter-spacing: 4px
+}
+
+/* =========================================
+   ESTRUCTURA Y LAYOUT (Extraídos de App.jsx)
+   ========================================= */
+
+.header-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  max-width: 100%;
+  grid-template-columns: 1fr auto;
+}
+
+.header-title {
+  margin: 0;
+  font-weight: bold;
+}
+
+.room-section {
+  background: #1a1d24;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+/* PUZLES Y ESTATUS */
+.puzzle-status-box {
+  margin: 15px 0;
+  padding: 10px;
+  border: 1px solid #444;
+  border-radius: 4px;
+}
+
+.puzzle-status-box.solved {
+  background: #1b330f;
+}
+
+.puzzle-status-box.locked {
+  background: #222;
+}
+
+.puzzle-status-box.solved .puzzle-status-text {
+  color: #67C23A;
+}
+
+.puzzle-status-box.locked .puzzle-status-text {
+  color: #E6A23C;
+}
+
+.puzzle-status-text {
+  margin: 0;
+  font-size: 13px;
+  font-family: monospace;
+}
+
+/* ITEMS EN EL SUELO */
+.floor-items-container {
+  margin-top: 20px;
+}
+
+.floor-items-grid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.floor-item-card {
+  padding: 12px;
+  background: #111;
+  border-radius: 6px;
+  border: 1px solid #333;
+  min-width: 150px;
+}
+
+.floor-item-title {
+  color: #fff;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.floor-item-desc {
+  display: block;
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.btn-pickup {
+  margin-top: 4px;
+  width: 100%;
+  cursor: pointer;
+}
+
+/* NAVEGACIÓN Y MAPA */
+.navigation-ui {
+  margin-top: 20px;
+}
+
+.east-west-row {
+  display: flex;
+  gap: 10px;
+  margin: 5px 0;
+}
+
+.maze-title {
+  margin: 0 0 10px 0;
+  color: var(--accent-color);
+}
+
+/* INVENTARIO Y POP-UP MODAL */
+.inventory-grid-container {
+  margin-top: 20px;
+  background: #11141a;
+  padding: 15px;
+  border-radius: 4px;
+  border: 1px solid #333;
+}
+
+.inventory-title {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  color: #888;
+  font-family: monospace;
+}
+
+.has-cursor {
+  cursor: pointer;
+}
+
+.inventory-item-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.item-pos {
+  font-size: 9px;
+  opacity: 0.6;
+  margin-top: 2px;
+}
+
+.empty-slot-text {
+  color: #444;
+}
+
+.modal-buttons-container {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* TECLADO DE CÓDIGO (KEYPAD) */
+.keypad-container {
+  margin-top: 20px;
+  padding: 15px;
+  background: #222630;
+  border-radius: 6px;
+  width: 200px;
+}
+
+.keypad-message {
+  margin: 0 0 10px 0;
+  font-size: 12px;
+  color: #a0aec0;
+  font-family: monospace;
+}
+
+.keypad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.btn-keypad-num {
+  padding: 10px;
+}
+
+.btn-keypad-clear {
+  background: #f56c6c;
+  color: white;
+}
+
+.btn-keypad-ok {
+  background: #67c23a;
+  color: white;
 }
