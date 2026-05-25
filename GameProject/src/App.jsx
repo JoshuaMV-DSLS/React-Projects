@@ -133,6 +133,43 @@ function InventoryBar() {
           );
         })}
       </div>
+
+      {/* 🚨 EL POP-UP (MODAL OVERLAY) */}
+      {activeItem && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+          background: 'rgba(0,0,0,0.7)', display: 'flex', justifyContent: 'center',
+          alignItems: 'center', zIndex: 1000
+        }}>
+          <div style={{
+            background: '#1a1d24', border: '2px solid #67C23A', padding: '20px',
+            borderRadius: '8px', maxWidth: '300px', width: '100%', textAlign: 'center',
+            boxShadow: '0 0 15px rgba(103, 194, 58, 0.3)'
+          }}>
+            <span style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              {activeItem.type === "tool" ? "🔧 Herramienta" : "🔋 Consumible"}
+            </span>
+            <h2 style={{ margin: '5px 0 15px 0', color: '#fff' }}>{activeItem.name}</h2>
+            <p style={{ color: '#a0aec0', fontSize: '14px', marginBottom: '20px' }}>{activeItem.description}</p>
+            
+            {/* Acciones del Pop-up */}
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+              <button 
+                onClick={() => handleUseItem(activeItem)}
+                style={{ background: '#67c23a', color: 'white', padding: '8px 15px', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+              >
+                Usar
+              </button>
+              <button 
+                onClick={() => setActiveItem(null)}
+                style={{ background: '#444', color: 'white', padding: '8px 15px', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
