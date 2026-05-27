@@ -132,17 +132,24 @@ function InventoryBar() {
     setActiveItem(null);
   };
 
+  const getItemLabel = (type) => {
+    switch (type) {
+      case "tool": return "🔧 Herramienta";
+      case "note": return "📜 Documento";
+      case "consumable": return "🔋 Consumible";
+      default: return "📦 Objeto";
+    }
+  };
+
   return (
     <div className="inventory-grid-container">
-      <h3 className="inventory-title">
-        INVENTARIO ({inventory.length} / 5)
-      </h3>
+      <h3 className="inventory-title">INVENTARIO ({inventory.length} / 5)</h3>
       
       <div className="inventory">
         {Array.from({ length: 5 }).map((_, index) => {
           const item = inventory[index];
           const hasItemClass = item ? 'inventory-has-item has-cursor' : 'inventory-is-empty';
-          
+
           return (
             <div 
               key={index} 
@@ -152,9 +159,7 @@ function InventoryBar() {
               {item ? (
                 <div className="inventory-item-details">
                   <span className="item-name">{item.name}</span>
-                  <span className="item-pos">
-                    {item.type === "tool" ? "🔧 Tool" : "🔋 Consum"}
-                  </span>
+                  <span className="item-label">{getItemLabel(item.type)}</span>
                 </div>
               ) : (
                 <span className="empty-slot-text">[ Vacío ]</span>
@@ -168,23 +173,24 @@ function InventoryBar() {
       {activeItem && (
         <div className="modal-overlay"> 
           <div className="modal-content">
-            <span className="active-item-type">
-              {activeItem.type === "tool" ? "🔧 Herramienta" : "🔋 Consumible"}
-            </span>
+            <span className="active-item-type">{getItemLabel(activeItem.type)}</span>
+            
             <h2 className="active-item-name">{activeItem.name}</h2>
             <p className="active-item-description">{activeItem.description}</p>
             
+            {activeItem.type === "note" && (
+              <div className="note-content-box">
+                <p><em>"{activeItem.content}"</em></p>
+              </div>
+            )}
+
             <div className="modal-buttons-container">
-              <button 
-                onClick={() => handleUseItem(activeItem)}
-                className="btn-action btn-use"
-              >
-                Usar
-              </button>
-              <button 
-                onClick={() => setActiveItem(null)}
-                className="btn-action btn-close"
-              >
+              {activeItem.type !== "note" && (
+                <button onClick={() => handleUseItem(activeItem)} className="btn-action btn-use">
+                  Usar
+                </button>
+              )}
+              <button onClick={() => setActiveItem(null)} className="btn-action btn-close">
                 Cerrar
               </button>
             </div>

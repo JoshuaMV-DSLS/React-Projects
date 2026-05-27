@@ -11,7 +11,10 @@ export const escapeMap = [
     id: 1, 
     name: "Room 2 (Dormitorio)", 
     description: "Un dormitorio militar abandonado...",
-    items: [ { id: "crowbar", name: "Palanca de Hierro", description: "Útil para forzar mecanismos", type: "tool" } ],
+    items: [ 
+      { id: "crowbar", name: "Palanca de Hierro", description: "Útil para forzar mecanismos", type: "tool" },
+      {id: "diario_viejo", name: "Diario polvoriento", description: "Un diario con anotaciones extrañas.", type: "note", content: "En la última página dice: El código de seguridad es 482."},
+    ],
     connections: { south: 0, east: 2 }
   },
   { 
@@ -35,7 +38,7 @@ export const escapeMap = [
     puzzle: {
       id: "panel_energia",
       type: "code",
-      solution: "042",
+      solution: "482",
       rewardItem: { id: "fuses_heavy", name: "Fusibles", description: "Fusibles de alta potencia.", type: "consumable" },
       lockedMessage: "El panel digital requiere un código de acceso de 3 dígitos.",
       solvedMessage: "¡Código aceptado! El casillero se abre revelando unos fusibles."

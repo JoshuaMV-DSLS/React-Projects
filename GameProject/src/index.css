@@ -568,7 +568,7 @@ code {
 .keypad-message {
   margin: 0 0 10px 0;
   font-size: 12px;
-  color: #334051;
+  color: #9ab5d7;
   font-family: monospace;
 }
 
@@ -590,4 +590,13 @@ code {
 .btn-keypad-ok {
   background: #67c23a;
   color: white;
+}
+
+.note-content-box {
+  background: #2a2a2a;
+  padding: 15px;
+  border-left: 4px solid #e6a23c;
+  margin: 15px 0;
+  font-style: italic;
+  color: #ddd;
 }
