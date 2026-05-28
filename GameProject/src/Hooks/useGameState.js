@@ -14,21 +14,26 @@ export function useGameState() {
   const currentRoom = escapeMap.find(room => room.id === currentRoomId) || escapeMap[0];
 
     const movePlayer = (direction) => {
-        const nextRoomId = currentRoom.connections?.[direction];
+        // 1. Obtenemos la habitación actual
+        const current = escapeMap[currentRoomId];
+        
+        // 2. Calculamos las coordenadas de destino según la dirección
+        let nextX = current.x;
+        let nextY = current.y;
 
-        if (nextRoomId === undefined) {
-        setSystemMessage("Camino bloqueado: Hay una pared.");
-        return;
+        if (direction === "north") nextY -= 1;
+        if (direction === "south") nextY += 1;
+        if (direction === "west")  nextX -= 1;
+        if (direction === "east")  nextX += 1;
+
+        // 3. Buscamos en todo el mapa si existe una habitación en esas nuevas coordenadas
+        const nextRoom = Object.values(escapeMap).find(r => r.x === nextX && r.y === nextY);
+
+        // 4. Validación de movimiento
+        if (!nextRoom) {
+            setSystemMessage("No hay nada en esa dirección.");
+            return;
         }
-        console.log("¿Habitación desbloqueada?", unlockedRoomIds.includes(currentRoom.id))
-        // --- BLOQUEO DE CANDADOS (OBJETOS) ---
-        // validacion en unlockedRoomIds
-        if (currentRoom.lock) {
-        // Si intentas ir hacia la dirección bloqueada y NO está en la lista de desbloqueadas
-        if (currentRoom.lock.direction === direction && !unlockedRoomIds.includes(currentRoom.id)) {
-            setSystemMessage(currentRoom.lock.lockedDescription);
-            return; // 🛑 Denegado
-        }}
 
         // --- BLOQUEO DE PUZLES (CÓDIGO) ---
         if (currentRoom.puzzle) {
@@ -46,9 +51,9 @@ export function useGameState() {
         }}
 
         // Si pasamos todos los filtros, movemos al jugador
-        setCurrentRoomId(nextRoomId);
+        setCurrentRoomId(nextRoom.id);
         setSystemMessage("");
-    };
+        };
 
     const pickUpItem = (item) => {
         if (inventory.length >= 5) {

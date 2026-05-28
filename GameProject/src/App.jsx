@@ -108,20 +108,35 @@ function NavigationControls() {
   );
 }
 
-function MazeMap({ currentId }) {
+const MazeMap = ({ currentRoomId, escapeMap }) => {
+  const GRID_SIZE = 4; // Tu cuadrícula de 4x4
+
   return (
-    <div className="maze-container">
-      <h3 className="maze-title">MAPA DEL COMPLEJO</h3>
-      <div className="maze-grid">
-        {escapeMap.map((room) => (
-          <div key={room.id} className={"map-node " + (room.id === currentId ? 'current' : '')}>
-            {room.name}
-          </div>
-        ))}
-      </div>
+    <div className="minimap-container">
+      {/* Generamos las filas */}
+      {Array.from({ length: GRID_SIZE }).map((_, y) => (
+        <div key={y} className="map-row">
+          {/* Generamos las columnas */}
+          {Array.from({ length: GRID_SIZE }).map((_, x) => {
+            // Buscamos si hay una habitación en esta celda específica
+            const room = Object.values(escapeMap).find(r => r.x === x && r.y === y);
+            const isCurrent = room?.id === currentRoomId;
+
+            return (
+              <div 
+                key={`${x}-${y}`} 
+                className={`map-cell ${room ? 'active-room' : 'empty'} ${isCurrent ? 'player-here' : ''}`}
+              >
+                {/* Puedes mostrar el nombre o un icono aquí */}
+                {isCurrent && "📍"}
+              </div>
+            );
+          })}
+        </div>
+      ))}
     </div>
   );
-}
+};
 
 function InventoryBar() {
   const { inventory, useItemFromInventory } = useGame();
