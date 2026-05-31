@@ -92,33 +92,46 @@ function RoomView() {
 
 function NavigationControls() {
   const { currentRoom, movePlayer } = useGame();
-  const connections = currentRoom.connections;
+  
+  // Usamos la importación directa si escapeMap del contexto es undefined
+  const mapData = escapeMap; 
 
-  if (!connections) return null;
+  if (!currentRoom || !mapData) return null;
+
+  const canMove = (direction) => {
+    let checkX = currentRoom.x;
+    let checkY = currentRoom.y;
+    if (direction === 'north') checkY -= 1;
+    if (direction === 'south') checkY += 1;
+    if (direction === 'west')  checkX -= 1;
+    if (direction === 'east')  checkX += 1;
+
+    return Object.values(mapData).some(room => room.x === checkX && room.y === checkY);
+  };
 
   return (
     <div className="navigation-ui">
-      {connections.north !== undefined && <button onClick={() => movePlayer('north')}>Norte ↑</button>}
+      {canMove('north') && <button onClick={() => movePlayer('north')}>Norte ↑</button>}
+      
       <div className="east-west-row">
-        {connections.west !== undefined && <button onClick={() => movePlayer('west')}>← Oeste</button>}
-        {connections.east !== undefined && <button onClick={() => movePlayer('east')}>Este →</button>}
+        {canMove('west')  && <button onClick={() => movePlayer('west')}>← Oeste</button>}
+        {canMove('east')  && <button onClick={() => movePlayer('east')}>Este →</button>}
       </div>
-      {connections.south !== undefined && <button onClick={() => movePlayer('south')}>Sur ↓</button>}
+      
+      {canMove('south') && <button onClick={() => movePlayer('south')}>Sur ↓</button>}
     </div>
   );
 }
 
-const MazeMap = ({ currentRoomId, escapeMap }) => {
-  const GRID_SIZE = 4; // Tu cuadrícula de 4x4
+const MazeMap = ({ currentRoomId }) => {
+  const GRID_SIZE = 4;
 
-  return (
+return (
     <div className="minimap-container">
-      {/* Generamos las filas */}
       {Array.from({ length: GRID_SIZE }).map((_, y) => (
         <div key={y} className="map-row">
-          {/* Generamos las columnas */}
           {Array.from({ length: GRID_SIZE }).map((_, x) => {
-            // Buscamos si hay una habitación en esta celda específica
+            // Importación directa para evitar que sea undefined
             const room = Object.values(escapeMap).find(r => r.x === x && r.y === y);
             const isCurrent = room?.id === currentRoomId;
 
@@ -127,7 +140,6 @@ const MazeMap = ({ currentRoomId, escapeMap }) => {
                 key={`${x}-${y}`} 
                 className={`map-cell ${room ? 'active-room' : 'empty'} ${isCurrent ? 'player-here' : ''}`}
               >
-                {/* Puedes mostrar el nombre o un icono aquí */}
                 {isCurrent && "📍"}
               </div>
             );

@@ -2,9 +2,8 @@
 export const escapeMap = {
   "room1": { 
     id: "room1", 
-    x: 1, y: 1, // Posición en la cuadrícula
-    connections: { north: "room2" },
-    name: "Room 2 (Celdas)",
+    x: 0, y: 0, // Posición en la cuadrícula
+    name: "(Celdas)",
     description: "Una celda fría y oscura...",
     items: [ { id: "key_card_blue", name: "Tarjeta Azul", description: "Acceso de nivel 1", type: "tool" } ],
 
@@ -12,9 +11,8 @@ export const escapeMap = {
  
   "room2": { 
     id: "room2", 
-    x: 1, y: 2, // Está al norte de la room1
-    connections: { south: "room1", east: "room3" },
-    name: "Room 3 (Dormitorio Militar)",
+    x: 0, y: 1, // Está al norte de la room1
+    name: "(Dormitorio Militar)",
     description: "Un dormitorio militar abandonado...",
     items: [ 
       { id: "crowbar", name: "Palanca de Hierro", description: "Útil para forzar mecanismos", type: "tool" },
@@ -23,9 +21,8 @@ export const escapeMap = {
   },
   "room3": { 
     id: "room3", 
-    x: 2, y: 2, // Está al este de la room2
-    connections: { west: "room2", east: "room4" },
-    name: "Room 4 (Sótano)",
+    x: 1, y: 1, // Está al este de la room2
+    name: "(Sótano)",
     description: "El sótano del complejo. Una enorme compuerta hidráulica bloquea el paso hacia el este.",
     lock: {
       direction: "east",
@@ -37,9 +34,8 @@ export const escapeMap = {
   },
   "room4": { 
     id: "room4", 
-        x: 3, y: 2, // Está al este de la room3
-    connections: { west: "room3" },
-    name: "Room 5 (Mantenimiento)", 
+        x: 2, y: 1, // Está al este de la room3
+    name: "(Mantenimiento)", 
     description: "La sala de mantenimiento principal. Un panel de energía digital requiere un código, y la caja de circuitos principal requiere reparación.", 
     puzzle: {
       id: "panel_energia",
