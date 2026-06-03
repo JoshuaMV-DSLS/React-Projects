@@ -17,6 +17,8 @@ export function useGameState() {
   }, [currentRoomId]);
 
   const movePlayer = (direction) => {
+    alert("¡Me has pulsado! Dirección: " + direction); // Esto es un "martillazo" para ver si entra
+    console.log("--- Intento de movimiento ---");
     // Si currentRoom no existe por alguna razón, protegemos el código
         if (!currentRoom) return;
 
@@ -36,21 +38,16 @@ export function useGameState() {
         }
 
         // --- BLOQUEO DE PUZLES (CÓDIGO) ---
-        if (currentRoom.puzzle) {
-        // Puzle bloquea esta dirección si NO está resuelto
-        if (currentRoom.puzzle.direction === direction && !solvedPuzzleIds.includes(currentRoom.puzzle.id)) {
-            setSystemMessage(currentRoom.puzzle.lockedMessage);
-            return; // 🛑 Denegado
+        if (currentRoom.puzzle?.direction) {
+            console.log("Comparando:", currentRoom.puzzle.direction, "vs", direction);
+            if (currentRoom.puzzle.direction === direction && !solvedPuzzleIds.includes(currentRoom.puzzle.id)) {
+                setSystemMessage(currentRoom.puzzle.lockedMessage);
+        return; // 🛑 Denegado
         }}
 
         // --- BLOQUEO DE ENTORNO (PALANCA/ITEMS) ---
-        if (currentRoom.puzzle?.direction === direction && !solvedPuzzleIds.includes(currentRoom.puzzle.id)) {
-            setSystemMessage(currentRoom.puzzle.lockedMessage);
-            return;
-            }
-
             if (currentRoom.itemPuzzle?.direction === direction && !solvedPuzzleIds.includes(currentRoom.itemPuzzle.id)) {
-            setSystemMessage(currentRoom.itemPuzzle.lockedMessage);
+                 setSystemMessage(currentRoom.itemPuzzle.lockedMessage);
             return;
             }
         setCurrentRoomId(nextRoom.id);

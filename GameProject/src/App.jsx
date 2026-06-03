@@ -40,6 +40,8 @@ function GameLayout() {
 }
 
 // ---------- APP ----------
+console.log("¡HOLA! App.jsx se está cargando...");
+
 export default function App() {
   return (
     <GameProvider>
@@ -129,17 +131,12 @@ const MazeMap = ({ currentRoomId }) => {
 return (
     <div className="minimap-container">
       {Array.from({ length: GRID_SIZE }).map((_, y) => (
-        <div key={y} className="map-row">
+        <div key={y} style={{ display: 'flex', gap: '5px' }}>
           {Array.from({ length: GRID_SIZE }).map((_, x) => {
-            // Importación directa para evitar que sea undefined
             const room = Object.values(escapeMap).find(r => r.x === x && r.y === y);
             const isCurrent = room?.id === currentRoomId;
-
             return (
-              <div 
-                key={`${x}-${y}`} 
-                className={`map-cell ${room ? 'active-room' : 'empty'} ${isCurrent ? 'player-here' : ''}`}
-              >
+              <div key={`${x}-${y}`} style={{ width: '20px', height: '20px', background: room ? 'red' : '#555' }}>
                 {isCurrent && "📍"}
               </div>
             );
