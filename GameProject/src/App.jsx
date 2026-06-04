@@ -40,7 +40,6 @@ function GameLayout() {
 }
 
 // ---------- APP ----------
-console.log("¡HOLA! App.jsx se está cargando...");
 
 export default function App() {
   return (
