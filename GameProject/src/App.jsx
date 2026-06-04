@@ -113,12 +113,10 @@ function NavigationControls() {
   return (
     <div className="navigation-ui">
       {canMove('north') && <button onClick={() => movePlayer('north')}>Norte ↑</button>}
-      
       <div className="east-west-row">
         {canMove('west')  && <button onClick={() => movePlayer('west')}>← Oeste</button>}
         {canMove('east')  && <button onClick={() => movePlayer('east')}>Este →</button>}
       </div>
-      
       {canMove('south') && <button onClick={() => movePlayer('south')}>Sur ↓</button>}
     </div>
   );

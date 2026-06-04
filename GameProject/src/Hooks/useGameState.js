@@ -60,6 +60,22 @@ export function useGameState() {
                 return; // 🛑 Denegado
             }
         }
+
+        // 🚀 --- NUEVO: BLOQUEO DE TIPO CANDADO (LOCK) --- 🚀
+        if (currentRoom.lock?.direction) {
+            const lockDir = currentRoom.lock.direction.toLowerCase();
+            const moveDir = direction.toLowerCase();
+            
+            // Verificamos si esta habitación NO ha sido desbloqueada todavía
+            const isUnlocked = unlockedRoomIds.includes(currentRoom.id);
+
+            if (lockDir === moveDir && !isUnlocked) {
+                // Si está bloqueado, muestra la descripción del candado
+                setSystemMessage(currentRoom.lock.lockedDescription || "El camino está bloqueado.");
+                return; // 🛑 Denegado
+            }
+        }
+        console.log("¡DEBUG! Estoy a punto de ejecutar setCurrentRoomId.");
         setCurrentRoomId(nextRoom.id);
         setSystemMessage("");
     };
