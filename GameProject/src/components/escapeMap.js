@@ -51,7 +51,19 @@ export const escapeMap = {
       requiredItemId: "fuses_heavy", // El ítem que el jugador debe "Usar" aquí
       isSolved: false,
       lockedMessage: "La caja de circuitos principal está vacía. Necesita fusibles de alta potencia para restaurar la luz del complejo.",
-      solvedMessage: "🔋 ¡Fusibles instalados! Los generadores rugen y la energía del complejo se ha restaurado por completo. ¡Has escapado!"
+      solvedMessage: "🔋 ¡Fusibles instalados! Los generadores rugen y la energía del complejo se ha restaurado por completo."
     },
   },
+
+  "room5": {
+    id: "room5",
+    x: 1, y: 2, // Estará al sur del Sótano (room3)
+    name: "(Laboratorio Químico)",
+    requiresPower: true, // Propiedad personalizada para la mecánica de luz
+    description: "Un laboratorio lleno de reactivos químicos y pantallas apagadas.",
+    darkDescription: "⚠️ Todo está en absoluta oscuridad. Se escucha el zumbido de un generador averiado. No logras distinguir nada a tu alrededor.",
+    items: [
+      { id: "chemical_flask", name: "Frasco de Ácido", description: "Un compuesto altamente corrosivo.", type: "tool" }
+    ]
+  }
 };

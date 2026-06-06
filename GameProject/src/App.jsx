@@ -52,13 +52,31 @@ export default function App() {
 // ---------- COMPONENTES SECUNDARIOS ----------
 
 function RoomView() {
-  const { currentRoom, collectedItemIds, pickUpItem, isItemPuzzleSolved } = useGame();
+  // 1. Usamos EXACTAMENTE el mismo hook que GameLayout para no romper el estado
+  const { 
+    currentRoom, collectedItemIds = [], pickUpItem, solvedPuzzleIds = [], isItemPuzzleSolved } = useGame();
+
+  // Protección por si la habitación tarda en cargar
+  if (!currentRoom) return <p>Cargando habitación...</p>;
+
+  // 2. Usamos tu lógica original para filtrar los ítems del suelo
   const availableItems = currentRoom.items?.filter(item => !collectedItemIds.includes(item.id)) || [];
 
+  // 3. Mecánica de Oscuridad: Si la sala requiere energía y los fusibles NO están resueltos
+  const isRoomDark = currentRoom.requiresPower && !solvedPuzzleIds.includes("caja_fusibles");
+
+  console.log("¿La sala requiere energía?:", currentRoom.requiresPower);
+  console.log("Lista de puzles resueltos actualmente:", solvedPuzzleIds);
+  console.log("¿Está oscuro?:", isRoomDark);
+
   return (
-    <>
+    <div className={`room-view-wrapper ${isRoomDark ? 'room-dark' : ''}`}>
       <h2>{currentRoom.name}</h2>
-      <p>{currentRoom.description}</p>
+      
+      {/* Descripción dinámica según la luz */}
+      <p className="room-description">
+        {isRoomDark ? currentRoom.darkDescription : currentRoom.description}
+      </p>
 
       {/* Indicador visual del puzle de la habitación */}
       {currentRoom.itemPuzzle && (
@@ -69,25 +87,32 @@ function RoomView() {
         </div>
       )}
       
-      {/* Items en el suelo */}
-      {availableItems.length > 0 && (
-        <div className="floor-items-container">
-          <h3>Objetos en el suelo</h3>
-          <div className="floor-items-grid">
-            {availableItems.map(item => (
-              <div key={item.id} className="floor-item-card">
-                <strong className="floor-item-title">{item.name}</strong>
-                {item.description && <span className="floor-item-desc">{item.description}</span>}
-                <button onClick={() => pickUpItem(item)} className="btn-pickup">Recoger</button>
-              </div>
-            ))}
-          </div>
+      {/* Items en el suelo dependientes de la luz */}
+      {isRoomDark ? (
+        <div className="dark-notice-box">
+          <p className="text-warning">✨ No puedes buscar objetos en la absoluta oscuridad. Necesitas restablecer la energía.</p>
         </div>
+      ) : (
+        availableItems.length > 0 && (
+          <div className="floor-items-container">
+            <h3>Objetos en el suelo</h3>
+            <div className="floor-items-grid">
+              {availableItems.map(item => (
+                <div key={item.id} className="floor-item-card">
+                  <strong className="floor-item-title">{item.name}</strong>
+                  {item.description && <span className="floor-item-desc">{item.description}</span>}
+                  <button onClick={() => pickUpItem(item)} className="btn-pickup">Recoger</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )
       )}
       
+      {/* Controles del entorno */}
       <CodeKeypad />
       <NavigationControls />
-    </>
+    </div>
   );
 }
 

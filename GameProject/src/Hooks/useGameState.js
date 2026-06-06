@@ -1,6 +1,7 @@
 // src/hooks/useGameState.js
 import { useState, useMemo } from "react";
 import { escapeMap } from "../components/escapeMap.js";
+import { checkMovementBlock } from "../utils/movementRules.js";
 
 export function useGameState() {
   // 1. Declaramos el estado ANTES de usarlo en el useMemo
@@ -11,7 +12,7 @@ export function useGameState() {
   const [solvedPuzzleIds, setSolvedPuzzleIds] = useState([]);
   const [systemMessage, setSystemMessage] = useState("");
 
-  // 2. Ahora sí, calculamos la habitación actual de forma segura
+  // 2. Calcula la habitación actual
   const currentRoom = useMemo(() => {
     return escapeMap[currentRoomId] || Object.values(escapeMap)[0];
   }, [currentRoomId]);
@@ -31,54 +32,22 @@ export function useGameState() {
 
         const nextRoom = Object.values(escapeMap).find(r => r.x === nextX && r.y === nextY);
 
-        if (!nextRoom) {
-        setSystemMessage("No hay nada en esa dirección.");
-        return;
+            if (!nextRoom) {
+            setSystemMessage("No hay nada en esa dirección.");
+            return;
         }
 
-        // --- BLOQUEO DE PUZLES (CÓDIGO) ---
-        if (currentRoom.puzzle?.direction) {
-            const puzzleDir = currentRoom.puzzle.direction.toLowerCase();
-            const moveDir = direction.toLowerCase();
+        const validation = checkMovementBlock(currentRoom, direction, solvedPuzzleIds, unlockedRoomIds);
             
-            console.log(`Intentando ir al ${moveDir}. Bloqueo en: ${puzzleDir}`);
-            console.log(`¿Puzle resuelto?: ${solvedPuzzleIds.includes(currentRoom.puzzle.id)}`);
-
-            if (puzzleDir === moveDir && !solvedPuzzleIds.includes(currentRoom.puzzle.id)) {
-                setSystemMessage(currentRoom.puzzle.lockedMessage);
-                return; // 🛑 Denegado
+            if (!validation.canMove) {
+            setSystemMessage(validation.message);
+            return; // 🛑 El movimiento se detiene aquí si checkMovementBlock dice que no
             }
-        }
 
-        // --- BLOQUEO DE ENTORNO (PALANCA/ITEMS) ---
-        if (currentRoom.itemPuzzle?.direction) {
-            const itemPuzzleDir = currentRoom.itemPuzzle.direction.toLowerCase();
-            const moveDir = direction.toLowerCase();
-
-            if (itemPuzzleDir === moveDir && !solvedPuzzleIds.includes(currentRoom.itemPuzzle.id)) {
-                setSystemMessage(currentRoom.itemPuzzle.lockedMessage);
-                return; // 🛑 Denegado
-            }
-        }
-
-        // 🚀 --- NUEVO: BLOQUEO DE TIPO CANDADO (LOCK) --- 🚀
-        if (currentRoom.lock?.direction) {
-            const lockDir = currentRoom.lock.direction.toLowerCase();
-            const moveDir = direction.toLowerCase();
-            
-            // Verificamos si esta habitación NO ha sido desbloqueada todavía
-            const isUnlocked = unlockedRoomIds.includes(currentRoom.id);
-
-            if (lockDir === moveDir && !isUnlocked) {
-                // Si está bloqueado, muestra la descripción del candado
-                setSystemMessage(currentRoom.lock.lockedDescription || "El camino está bloqueado.");
-                return; // 🛑 Denegado
-            }
-        }
-        console.log("¡DEBUG! Estoy a punto de ejecutar setCurrentRoomId.");
-        setCurrentRoomId(nextRoom.id);
-        setSystemMessage("");
-    };
+            // 4. Si todo está bien, mover al jugador
+            setCurrentRoomId(nextRoom.id);
+            setSystemMessage("");
+     };
 
     const pickUpItem = (item) => {
         if (inventory.length >= 5) {
@@ -157,9 +126,9 @@ export function useGameState() {
   const isItemPuzzleSolved = currentRoom?.itemPuzzle ? solvedPuzzleIds.includes(currentRoom.itemPuzzle.id) : false;
 
   return {
+    systemMessage,solvedPuzzleIds ,setSystemMessage, movePlayer, pickUpItem, 
     escapeMap, currentRoom, currentRoomId, inventory, collectedItemIds, 
     unlockedRoomIds, isCurrentPuzzleSolved, isItemPuzzleSolved, 
-    systemMessage, setSystemMessage, movePlayer, pickUpItem, 
     solveCodePuzzle, useItemFromInventory
   };
 }
