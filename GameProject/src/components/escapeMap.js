@@ -1,12 +1,17 @@
 // EL MAPA: Aquí definimos la estructura de las habitaciones, sus conexiones, los objetos que contienen, y los puzles asociados a cada una. Este mapa es la base de nuestro juego de escape room.
 export const escapeMap = {
-  "room1": { 
-    id: "room1", 
-    x: 0, y: 0, // Posición en la cuadrícula
-    name: "(Celdas)",
-    description: "Una celda fría y oscura...",
-    items: [ { id: "key_card_blue", name: "Tarjeta Azul", description: "Acceso de nivel 1", type: "tool" } ],
-
+    "room1": {
+    id: "room1",
+    x: 1, y: 0, // Zona de inicio
+    name: "(Zona de Evacuación)",
+    description: "El punto de inicio. Hay un contenedor de acero criogénico bloqueando una trampilla en el suelo hacia el norte.",
+    // 🚀 Bloqueo de entorno usando el nuevo ítem
+    itemPuzzle: {
+      id: "contenedor_congelado",
+      direction: "north", // Bloquea el paso al norte
+      requires: "nitrogen_flask", // Primero necesita el nitrógeno
+      lockedMessage: "El contenedor de acero es demasiado grueso y pesado para moverlo a la fuerza."
+    },
   },
  
   "room2": { 
@@ -65,5 +70,15 @@ export const escapeMap = {
     items: [
       { id: "chemical_flask", name: "Frasco de Ácido", description: "Un compuesto altamente corrosivo.", type: "tool" }
     ]
-  }
+  },
+
+  "room6": {
+    id: "room6",
+    x: 1, y: -1, // Al norte de la room1
+    name: "(Conductos de Ventilación)",
+    description: "Un conducto estrecho. Al final del pasillo hay un cadáver de un técnico con una Tarjeta Magnética en el bolsillo.",
+    items: [
+      { id: "keycard", name: "Tarjeta Magnética", description: "Una tarjeta de acceso de alta seguridad.", type: "key" }
+    ]
+  },
 };

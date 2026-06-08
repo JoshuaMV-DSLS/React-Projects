@@ -78,11 +78,43 @@ export function useGameState() {
     };
 
     const useItemFromInventory = (itemId) => {
+        
         const itemPuzzle = currentRoom.itemPuzzle;
         const lock = currentRoom.lock; // Extraemos el candado si la habitación lo tiene
         const item = inventory.find(i => i.id === itemId);
 
         if (!item) return false;
+        if (!currentRoom) return;
+
+        // ========================================================
+        // 🚀 NUEVO: COMBO DE PUZLES (NITRÓGENO + PALANCA)
+        // ========================================================
+
+        // FASE 1: Usar el Nitrógeno Líquido en la Habitación 1
+        if (currentRoom.id === "room1" && itemId === "nitrogen_flask") {
+            if (!solvedPuzzleIds.includes("metal_congelado")) {
+                setSolvedPuzzleIds(prev => [...prev, "metal_congelado"]);
+                setSystemMessage("Vertiste el nitrógeno líquido. El contenedor cruje y se ha congelado por completo, volviéndose frágil. Ahora necesitas algo para romperlo.");
+                return;
+            }
+        }
+
+        // FASE 2: Usar la Palanca para romper el metal congelado
+        if (currentRoom.id === "room1" && itemId === "crowbar") {
+            if (solvedPuzzleIds.includes("metal_congelado")) {
+                if (!solvedPuzzleIds.includes("contenedor_congelado")) { 
+                    setSolvedPuzzleIds(prev => [...prev, "contenedor_congelado"]);
+                    setSystemMessage("💥 ¡ZAS! Golpeaste el contenedor congelado con la palanca y se hizo pedazos, revelando la trampilla hacia el Norte. ¡Encontraste una Llave de Acceso entre los restos!");
+                    
+                    // Agregamos la nueva llave al inventario
+                    setInventory(prev => [...prev, { id: "access_key", name: "Llave de Acceso", type: "key" }]);
+                    return;
+                }
+            } else {
+                setSystemMessage("Golpeas el contenedor con la palanca, pero solo resuena un eco metálico. Es demasiado duro.");
+                return;
+            }
+        }
 
         // LÓGICA A: ¿Resuelve el puzle de la habitación? (Lo que ya tenías)
         if (itemPuzzle && itemPuzzle.requiredItemId === itemId) {
@@ -120,6 +152,9 @@ export function useGameState() {
         // Si el objeto no sirve ni para puzles ni para candados en esta sala
         setSystemMessage(`No parece que puedas usar ${item.name} en esta área.`);
         return false;
+
+
+        
     };
 
   const isCurrentPuzzleSolved = currentRoom?.puzzle ? solvedPuzzleIds.includes(currentRoom.puzzle.id) : false;
