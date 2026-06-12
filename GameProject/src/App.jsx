@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { GameProvider, GameContext } from "./context/GameContext.jsx";
 import { escapeMap } from "./components/escapeMap.js";
+import { MazeMap } from "./components/MazeMap.jsx";
 
 const useGame = () => useContext(GameContext);
 
@@ -33,7 +34,18 @@ function GameLayout() {
         
         <InventoryBar />
 
-        {showMap && <MazeMap currentId={currentRoomId} />}
+        {showMap && (
+        <div className="modal-overlay" onClick={() => setShowMap(false)}>
+          {/* El stopPropagation evita que el modal se cierre al hacer clic DEntro del mapa */}
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" onClick={() => setShowMap(false)}>
+              ✖
+            </button>
+            <MazeMap />
+          </div>
+        </div>
+      )}
+       
       </div>
     </main>
   );
@@ -147,27 +159,6 @@ function NavigationControls() {
   );
 }
 
-const MazeMap = ({ currentRoomId }) => {
-  const GRID_SIZE = 4;
-
-return (
-    <div className="minimap-container">
-      {Array.from({ length: GRID_SIZE }).map((_, y) => (
-        <div key={y} style={{ display: 'flex', gap: '5px' }}>
-          {Array.from({ length: GRID_SIZE }).map((_, x) => {
-            const room = Object.values(escapeMap).find(r => r.x === x && r.y === y);
-            const isCurrent = room?.id === currentRoomId;
-            return (
-              <div key={`${x}-${y}`} style={{ width: '20px', height: '20px', background: room ? 'red' : '#555' }}>
-                {isCurrent && "📍"}
-              </div>
-            );
-          })}
-        </div>
-      ))}
-    </div>
-  );
-};
 
 function InventoryBar() {
   const { inventory, useItemFromInventory } = useGame();

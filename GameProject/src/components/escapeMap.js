@@ -68,7 +68,7 @@ export const escapeMap = {
     description: "Un laboratorio lleno de reactivos químicos y pantallas apagadas.",
     darkDescription: "⚠️ Todo está en absoluta oscuridad. Se escucha el zumbido de un generador averiado. No logras distinguir nada a tu alrededor.",
     items: [
-      { id: "chemical_flask", name: "Frasco de Ácido", description: "Un compuesto altamente corrosivo.", type: "tool" }
+      { id: "nitrogen_flask", name: "Frasco de Nitrógeno", description: "Un frasco lleno de nitrógeno líquido.", type: "tool" }
     ]
   },
 
